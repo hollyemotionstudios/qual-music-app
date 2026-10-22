@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0e0e11">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Music">
 <title>Music</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -89,7 +95,7 @@ svg.f { fill: currentColor; stroke: none; }
 .shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.45)); }
 @keyframes drift { from { transform: rotate(0) scale(1.1); } to { transform: rotate(360deg) scale(1.1); } }
 
-.topbar { position: absolute; top: 0; left: 0; right: 0; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 3; }
+.topbar { position: absolute; top: env(safe-area-inset-top, 0px); left: 0; right: 0; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 3; }
 .topbar .from { text-align: center; font-size: 11px; color: var(--mute); letter-spacing: .06em; text-transform: uppercase; }
 .topbar .from b { display: block; color: var(--text); font-size: 13px; letter-spacing: 0; text-transform: none; font-weight: 600; margin-top: 2px; }
 .ib { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; color: var(--text); transition: background .2s, color .2s; }
@@ -97,7 +103,7 @@ svg.f { fill: currentColor; stroke: none; }
 .ib.on { background: rgba(255,255,255,.92); color: #111; }
 .ib svg { width: 22px; height: 22px; }
 
-.panel { position: absolute; inset: 68px 0 0; z-index: 2; transition: opacity .45s, transform .55s cubic-bezier(.2,.8,.2,1), visibility .45s; }
+.panel { position: absolute; inset: calc(68px + env(safe-area-inset-top, 0px)) 0 env(safe-area-inset-bottom, 0px); z-index: 2; transition: opacity .45s, transform .55s cubic-bezier(.2,.8,.2,1), visibility .45s; }
 .stage:not(.mode-lyrics) .p-lyrics, .stage.mode-lyrics .p-player { opacity: 0; visibility: hidden; pointer-events: none; }
 .stage.mode-lyrics .p-player { transform: scale(.94); }
 .stage:not(.mode-lyrics) .p-lyrics { transform: translateY(24px); }
@@ -479,6 +485,19 @@ function reset() {
   $$('.row').forEach(r => r.classList.remove('playing'));
   $('.main').scrollTop = 0;
 }
+
+// On phones and tablets, the first tap goes full screen (hides the browser's address and navigation bars)
+// and keeps the screen from dimming. Saved to the home screen, the manifest opens it full screen already.
+const touch = matchMedia('(pointer: coarse)').matches;
+let wakeLock = null;
+async function stayAwake() { try { if ('wakeLock' in navigator && !wakeLock) { wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', () => wakeLock = null); } } catch (e) {} }
+document.addEventListener('pointerup', () => {
+  if (!touch) return;
+  const el = document.documentElement;
+  if (!document.fullscreenElement && el.requestFullscreen) el.requestFullscreen({ navigationUI: 'hide' }).catch(() => {});
+  stayAwake();
+}, { capture: true });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && touch) stayAwake(); });
 
 // Hide the cursor on the stage after 2.5s without movement, so it never sits in shot
 let idleT;

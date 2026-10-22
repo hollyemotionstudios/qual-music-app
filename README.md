@@ -4,6 +4,10 @@ Mock music-streaming web app for film (qual 6138, Antonelli). Unbranded. It open
 
 Target sizes: Galaxy Z Fold 8 inner screen held upright, 616×816 CSS px (main), and the folded (cover) screen, 948×1048 (small screen; lyrics use the two-column layout at this width). The inner size assumes 3× scaling and is unverified on device. Larger screens still work. Single static file: `index.html`. Pushes to `main` redeploy on Vercel.
 
+## Full screen on a phone
+- **Best:** open the site in Chrome or Samsung Internet, then use the menu's **Add to Home screen** (or **Install app**). Opened from the home-screen icon, it runs full screen with no address bar or navigation bar.
+- **In the browser:** the first tap anywhere asks the phone to go full screen and keeps the screen from dimming. On iPhone Safari only the home-screen route works.
+
 ## On set
 - **Space** play/pause · **← / →** seek 5s · **L** lyrics · **Esc** back · **R** reset to the start (paused at 0:00) · **F** fullscreen
 - Tap a lyric line to jump to it. The cursor hides after 2.5s without movement.
