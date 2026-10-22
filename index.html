@@ -180,6 +180,7 @@ svg.f { fill: currentColor; stroke: none; }
 /* Primary target: Galaxy Z Fold 8 cover screen, 416×658 portrait */
 @media (max-height: 720px) {
   .p-player { padding-bottom: 16px; --below: 232px; }
+  body.no-lyrics .p-player { --below: 186px; }
   .p-player .meta { margin-top: 18px; }
   .p-player .ctl { margin-top: 14px; }
   .p-player .btns { margin-top: 4px; }
@@ -188,6 +189,10 @@ svg.f { fill: currentColor; stroke: none; }
 @media (max-height: 560px) and (max-width: 900px) {
   .p-player .cover { width: max(120px, var(--art)); }
 }
+/* Lyrics parked: no Lyrics pill, so the cover takes its 54px (46px compact) */
+body.no-lyrics .lyr-btn { display: none; }
+@media (min-height: 721px) { body.no-lyrics .p-player { --below: 220px; } }
+body.no-lyrics .p-player .cover { cursor: default; }
 body.idle .stage, body.idle .stage * { cursor: none !important; }
 </style>
 </head>
@@ -397,8 +402,14 @@ function setPlaying(p) {
 const SHOW_LIBRARY = new URLSearchParams(location.search).has('library');
 if (!SHOW_LIBRARY) $('[data-act="close"]').style.visibility = 'hidden';
 
+// Lyrics are parked too: no lyrics button or pill, and the cover gets their space.
+// Add ?lyrics=1 to the URL to bring them back.
+const SHOW_LYRICS = new URLSearchParams(location.search).has('lyrics');
+if (!SHOW_LYRICS) { document.body.classList.add('no-lyrics'); $('#lyrToggle').style.visibility = 'hidden'; }
+
 function show(view) {
   if (view === 'home' && !SHOW_LIBRARY) view = 'player';
+  if (view === 'lyrics' && !SHOW_LYRICS) view = 'player';
   st.view = view;
   matchStatusBar(view === 'home' ? null : st.song);
   stage.classList.toggle('open', view !== 'home');
