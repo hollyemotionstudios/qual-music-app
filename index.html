@@ -364,7 +364,13 @@ function setPlaying(p) {
   $$('[data-act="toggle"]').forEach(b => b.innerHTML = p ? IC.pause : IC.play);
 }
 
+// The Listen Now library is parked for now: the prop opens on the full-screen player.
+// Add ?library=1 to the URL to bring it back.
+const SHOW_LIBRARY = new URLSearchParams(location.search).has('library');
+if (!SHOW_LIBRARY) $('[data-act="close"]').style.visibility = 'hidden';
+
 function show(view) {
+  if (view === 'home' && !SHOW_LIBRARY) view = 'player';
   st.view = view;
   stage.classList.toggle('open', view !== 'home');
   stage.classList.toggle('mode-lyrics', view === 'lyrics');
@@ -448,7 +454,7 @@ $$('.scrub').forEach(sc => {
 // Let a manual scroll through the lyrics hold for a few seconds before auto-follow resumes
 ['wheel', 'touchmove'].forEach(ev => lyricsEl.addEventListener(ev, () => st.userScroll = performance.now() + 3500, { passive: true }));
 
-// Keyboard: space play/pause, arrows seek, L lyrics, Esc back, R reset to library, F fullscreen
+// Keyboard: space play/pause, arrows seek, L lyrics, Esc back, R reset to the start, F fullscreen
 document.addEventListener('keydown', e => {
   const k = e.key.toLowerCase();
   if (k === ' ') { e.preventDefault(); ACTS.toggle(); }
@@ -461,6 +467,7 @@ document.addEventListener('keydown', e => {
 });
 
 function reset() {
+  if (!SHOW_LIBRARY) { start(SONGS[0], { t: 0, play: false }, 'player'); return; }
   if (st.song) setPlaying(false);
   st.song = null; show('home');
   $('#mini').classList.remove('on');
@@ -472,14 +479,19 @@ function reset() {
 let idleT;
 document.addEventListener('pointermove', () => { document.body.classList.remove('idle'); clearTimeout(idleT); idleT = setTimeout(() => document.body.classList.add('idle'), 2500); });
 
-// Deep links for setting up a shot: ?song=midnight-arcade&view=lyrics&t=40&play=0
-const q = new URLSearchParams(location.search), qs = SONGS.find(s => s.id === q.get('song'));
-if (qs) {
+// Open a song straight onto the stage, without the slide-up animation
+function start(song, opts, view) {
   stage.style.transition = 'none';
-  load(qs, { t: +q.get('t') || 0, play: q.get('play') !== '0' });
-  show(q.get('view') === 'lyrics' ? 'lyrics' : 'player');
+  load(song, opts);
+  show(view);
   requestAnimationFrame(() => requestAnimationFrame(() => stage.style.transition = ''));
 }
+
+// Deep links for setting up a shot: ?song=funiculi-funicula&view=lyrics&t=47&play=0
+// With no deep link (and the library parked), open on the player, paused at 0:00.
+const q = new URLSearchParams(location.search), qs = SONGS.find(s => s.id === q.get('song'));
+if (qs) start(qs, { t: +q.get('t') || 0, play: q.get('play') !== '0' }, q.get('view') === 'lyrics' ? 'lyrics' : 'player');
+else if (!SHOW_LIBRARY) start(SONGS[0], { t: 0, play: false }, 'player');
 </script>
 </body>
 </html>
