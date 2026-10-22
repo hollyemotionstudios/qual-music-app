@@ -2,7 +2,7 @@
 
 Mock music-streaming web app for film (qual 6138, Antonelli). Unbranded. Pick the song (Funiculì, Funiculà) from the library, see the now-playing screen with album art and title, then open synced lyrics. There's no audio: a timer drives the playback. The song is public domain (Denza / Turco, 1880); the album art is original to the prop. Lyric timings are estimates until the production's recording is known.
 
-Primary size: Galaxy Z Fold 8 cover screen in portrait, 416×658 CSS px (assumed 3× scaling, unverified on device). Larger screens still work. Single static file: `index.html`. Pushes to `main` redeploy on Vercel.
+Target sizes: Galaxy Z Fold 8 inner screen held upright, 616×816 CSS px (main), and the cover screen, 416×658 (small screen). Both assume 3× scaling and are unverified on device. Larger screens still work. Single static file: `index.html`. Pushes to `main` redeploy on Vercel.
 
 ## On set
 - **Space** play/pause · **← / →** seek 5s · **L** lyrics · **Esc** back · **R** reset to library · **F** fullscreen
