@@ -209,7 +209,7 @@ body.idle .stage, body.idle .stage * { cursor: none !important; }
   <main class="main">
     <h1>Listen Now</h1>
     <p class="sub">Picked for you, updated every evening</p>
-    <h2>Top Picks</h2>
+    <h2>Your Favorites</h2>
     <div class="cards" id="cards"></div>
     <h2>Recently Played</h2>
     <div class="rows" id="rows"></div>
@@ -252,59 +252,45 @@ body.idle .stage, body.idle .stage * { cursor: none !important; }
 
 <script>
 /* ---------------------------------------------------------------
-   Songs. All titles, artists and lyrics are original to this prop.
-   Lyric timing: each line holds for `gap` seconds unless written as
-   ["line", seconds]. An empty string is an instrumental break.
+   Songs. Funiculì, Funiculà (Denza / Turco, 1880) is public domain.
+   Lyrics are [m:ss, line]; an empty line is an instrumental break.
+   Timings are estimates until the production's recording is known.
 ---------------------------------------------------------------- */
 const SONGS = [
-  { id: 'paper-lanterns', title: 'Paper Lanterns', artist: 'Juniper Vale', album: 'Low Tide Hours',
-    art: { kind: 'sun', a: '#f6a35b', b: '#c8576a', c: '#2b2350' }, start: 9, gap: 4.2,
-    lyrics: ['We hung the lanterns on the fire escape', 'You said the city never learned to wait', 'A paper moon above the laundry lines', 'And every window humming out of time', '',
-      'So let them float, let them burn', 'Little lights that don\'t return', 'If I could hold the night in place', 'I\'d keep the glow upon your face', '',
-      'The summer folded like a letter sent', 'I read it twice and still don\'t know what it meant', 'But when the rooftops turn to gold again', 'I\'ll light one more and call your name again', '',
-      'So let them float, let them burn', 'Little lights that don\'t return', 'If I could hold the night in place', ['I\'d keep the glow upon your face', 8]] },
-  { id: 'northbound', title: 'Northbound', artist: 'The Halcyon Static', album: 'Signal Fires',
-    art: { kind: 'waves', a: '#7fd1c7', b: '#2f6f8f', c: '#0f1d33' }, start: 12, gap: 3.6,
-    lyrics: ['Headlights on the interstate', 'Coffee cold and running late', 'Radio is breaking up', 'Static where the songs should be', 'Every mile a little more', 'Of who I was before', '',
-      'We\'re northbound, northbound', 'Chasing the edge of the morning', 'Northbound, northbound', 'Leaving the lights without warning', '',
-      'Mountains rising out of grey', 'Saying things I couldn\'t say', 'Window down and hands outstretched', 'Catching what the wind has left', '',
-      'We\'re northbound, northbound', 'Chasing the edge of the morning', 'Northbound, northbound', ['Leaving the lights without warning', 8]] },
-  { id: 'slow-motion-summer', title: 'Slow Motion Summer', artist: 'Mara Okafor', album: 'Golden Hour Radio',
-    art: { kind: 'blocks', a: '#ffd166', b: '#ef476f', c: '#26547c' }, start: 8, gap: 3.8,
-    lyrics: ['Sprinklers ticking on the lawn', 'Half past nothing, shoes are gone', 'You\'re laughing at a joke I missed', 'Sunlight resting on your wrist', '',
-      'It\'s a slow motion summer', 'Every second stretching out', 'Slow motion summer', 'Nothing I would change about', 'Hold it, hold it', 'Don\'t let the evening in', '',
-      'Ice cubes melting in a glass', 'Some days are built to never pass', 'If the world could stay this gold', 'I\'d never mind the getting old', '',
-      'It\'s a slow motion summer', 'Every second stretching out', 'Slow motion summer', ['Nothing I would change about', 8]] },
-  { id: 'midnight-arcade', title: 'Midnight Arcade', artist: 'Neon Pilots', album: 'Insert Coin',
-    art: { kind: 'grid', a: '#ff5fa2', b: '#7b2ff7', c: '#0b0326' }, start: 14, gap: 3.4,
-    lyrics: ['Quarters in my pocket, lights across the floor', 'High score blinking, I\'ve been here before', 'You pressed start beside me, player two', 'Every level after led me back to you', '',
-      'In the midnight arcade', 'We were never too late', 'Pixel hearts on the screen', 'Glowing pink and electric green', 'In the midnight arcade', '',
-      'Game over never meant the end', 'Insert a coin and play again', 'The city sleeping, we\'re still wide awake', 'Every heartbeat is a high score break', '',
-      'In the midnight arcade', 'We were never too late', 'Pixel hearts on the screen', 'Glowing pink and electric green', ['In the midnight arcade', 8]] },
-  { id: 'saltwater-letters', title: 'Saltwater Letters', artist: 'Ines Calder', album: 'The Lighthouse Year',
-    art: { kind: 'moon', a: '#f1e3c8', b: '#3d5a80', c: '#141c2e' }, start: 10, gap: 4.6,
-    lyrics: ['I wrote you letters in the sand', 'The tide came in and took my hand', 'It carried every word away', 'To somewhere I could never stay', '',
-      'Saltwater letters', 'Drifting out to sea', 'If they ever reach you', 'Will you write back to me', '',
-      'The lighthouse blinks its patient code', 'A thousand miles of silver road', 'I\'ll wait here where the gulls all cry', 'Until the ocean answers why', '',
-      'Saltwater letters', 'Drifting out to sea', 'If they ever reach you', ['Will you write back to me', 9]] },
-  { id: 'glasshouse', title: 'Glasshouse', artist: 'Kite Season', album: 'Fern Light',
-    art: { kind: 'rings', a: '#a7e8a1', b: '#3e8e7e', c: '#10261f' }, start: 11, gap: 4,
-    lyrics: ['Sunday in a glasshouse', 'Everything is green', 'Fern light on the ceiling', 'Somewhere in between', '',
-      'Breathe in, breathe out', 'Let the morning fall', 'Breathe in, breathe out', 'We don\'t need it all', '',
-      'Rain against the windows', 'Writing in a code', 'Only you can read it', 'Only you would know', '',
-      'Breathe in, breathe out', 'Let the morning fall', 'Breathe in, breathe out', ['We don\'t need it all', 8]] },
+  { id: 'funiculi-funicula', title: 'Funiculì, Funiculà', artist: 'Luigi Denza', album: 'Canzoni Napoletane',
+    art: { kind: 'funicular', a: '#ffcf70', b: '#e2725b', c: '#1f2a4d' }, duration: 112,
+    lyrics: [
+      ['0:12', 'Aissera, oje Nanninè, me ne sagliette,'],
+      ['0:16', 'tu saje addò, tu saje addò'],
+      ['0:19', "Addò 'stu core 'ngrato cchiù dispietto"],
+      ['0:23', 'farme nun pò! Farme nun pò!'],
+      ['0:26', 'Addò lo fuoco coce, ma si fuje'],
+      ['0:30', 'te lassa sta! Te lassa sta!'],
+      ['0:33', "E nun te corre appriesso, nun te struje"],
+      ['0:37', 'sulo a guardà, sulo a guardà.'],
+      ['0:41', "Jammo, jammo, 'ncoppa, jammo jà,"],
+      ['0:44', "jammo, jammo, 'ncoppa, jammo jà,"],
+      ['0:47', 'funiculì, funiculà, funiculì, funiculà,'],
+      ['0:51', "'ncoppa, jammo jà, funiculì, funiculà!"],
+      ['0:55', ''],
+      ['1:02', 'Nèh jammo: da la terra a la montagna'],
+      ['1:06', "no passo nc'è! No passo nc'è!"],
+      ['1:09', 'Se vede Francia, Proceta e la Spagna…'],
+      ['1:13', 'Io veco a tte! Io veco a tte!'],
+      ['1:16', "Tirato co la funa, ditto 'nfatto,"],
+      ['1:20', "'ncielo se va, 'ncielo se va…"],
+      ['1:23', "Se va comm'a lo viento a l'intrasatto,"],
+      ['1:27', 'gué, saglie, sà! Gué, saglie, sà!'],
+      ['1:31', "Jammo, jammo, 'ncoppa, jammo jà,"],
+      ['1:34', "jammo, jammo, 'ncoppa, jammo jà,"],
+      ['1:37', 'funiculì, funiculà, funiculì, funiculà,'],
+      ['1:41', "'ncoppa, jammo jà, funiculì, funiculà!"],
+    ] },
 ];
-const BREAK = 8;
 
-// Build each song's timeline: [{t, text}] with text === '' for breaks.
-for (const s of SONGS) {
-  let t = s.start; s.lines = [{ t: 0, text: '' }];
-  for (const l of s.lyrics) {
-    const [text, hold] = Array.isArray(l) ? l : [l, l === '' ? BREAK : s.gap];
-    s.lines.push({ t, text }); t += hold;
-  }
-  s.duration = Math.round(t + 6);
-}
+// Build each song's timeline: [{t, text}] with text === '' for breaks, plus an intro break at 0.
+const secs = ts => { const [m, s] = ts.split(':'); return +m * 60 + +s; };
+for (const s of SONGS) s.lines = [{ t: 0, text: '' }, ...s.lyrics.map(([ts, text]) => ({ t: secs(ts), text }))];
 
 /* ---------- Generated album art ---------- */
 let uid = 0;
@@ -330,6 +316,13 @@ function art(s) {
     g = `<rect width="100" height="100" fill="url(#${id})"/>`;
     for (let i = 0; i < 26; i++) g += `<circle cx="${(i * 37) % 100}" cy="${(i * 53) % 58}" r="${.4 + (i % 3) * .3}" fill="${a}" opacity=".7"/>`;
     g += `<circle cx="58" cy="38" r="17" fill="${a}"/><circle cx="66" cy="33" r="15" fill="${c}"/><path d="M0 72 Q 25 66 50 72 T 100 72 V100 H0z" fill="${c}" opacity=".9"/><rect x="40" y="76" width="22" height="1.4" fill="${a}" opacity=".6"/><rect x="34" y="82" width="34" height="1.2" fill="${a}" opacity=".4"/>`;
+  } else if (kind === 'funicular') {
+    g = `<rect width="100" height="100" fill="url(#${id})"/><circle cx="72" cy="30" r="13" fill="${a}"/>`;
+    g += `<path d="M-5 100 L38 34 Q44 28 50 34 L105 100z" fill="${c}"/><path d="M38 34 Q44 28 50 34 L46 38 Q44 34 42 38z" fill="${b}" opacity=".9"/>`;
+    g += `<path d="M44 30 Q40 20 46 14 Q50 9 47 3" fill="none" stroke="${a}" stroke-width="1.6" opacity=".55" stroke-linecap="round"/>`;
+    g += `<line x1="8" y1="96" x2="44" y2="36" stroke="${a}" stroke-width=".8"/><line x1="11" y1="98" x2="47" y2="38" stroke="${a}" stroke-width=".8"/>`;
+    g += `<g transform="rotate(-59 27 66)"><rect x="21" y="61" width="12" height="9" rx="1.5" fill="${b}"/><rect x="23" y="63" width="3" height="3" fill="${a}"/><rect x="28" y="63" width="3" height="3" fill="${a}"/></g>`;
+    g += `<path d="M0 88 Q 25 84 50 88 T 100 88 V100 H0z" fill="${c}" opacity=".85"/><rect x="0" y="90" width="100" height="10" fill="${b}" opacity=".25"/>`;
   } else {
     g = `<rect width="100" height="100" fill="${c}"/>`;
     for (let i = 9; i >= 1; i--) g += `<circle cx="38" cy="62" r="${i * 8}" fill="${i % 2 ? b : c}"/>`;
