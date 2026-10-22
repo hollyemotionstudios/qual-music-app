@@ -104,7 +104,7 @@ svg.f { fill: currentColor; stroke: none; }
 .stage:not(.mode-lyrics) .p-lyrics { transform: translateY(24px); }
 
 .cover { aspect-ratio: 1; border-radius: 12px; overflow: hidden; box-shadow: 0 24px 70px rgba(0,0,0,.5); }
-.cover svg, .th svg, .art svg { width: 100%; height: 100%; display: block; }
+.cover svg, .th svg, .art svg, .cover img, .th img, .art img, .bg img { width: 100%; height: 100%; display: block; object-fit: cover; }
 
 /* player panel */
 .p-player { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 24px 40px; gap: 0; }
@@ -236,7 +236,7 @@ body.idle .stage, body.idle .stage * { cursor: none !important; }
 ---------------------------------------------------------------- */
 const SONGS = [
   { id: 'funiculi-funicula', title: 'Funiculì, Funiculà', artist: 'Luigi Denza', album: 'Canzoni Napoletane',
-    art: { kind: 'funicular', a: '#ffcf70', b: '#e2725b', c: '#1f2a4d' }, duration: 112,
+    img: 'cover.jpg', art: { kind: 'funicular', a: '#ffcf70', b: '#e2725b', c: '#1f2a4d' }, duration: 112,
     lyrics: [
       ['0:12', 'Aissera, oje Nanninè, me ne sagliette,'],
       ['0:16', 'tu saje addò, tu saje addò'],
@@ -270,9 +270,10 @@ const SONGS = [
 const secs = ts => { const [m, s] = ts.split(':'); return +m * 60 + +s; };
 for (const s of SONGS) s.lines = [{ t: 0, text: '' }, ...s.lyrics.map(([ts, text]) => ({ t: secs(ts), text }))];
 
-/* ---------- Generated album art ---------- */
+/* ---------- Album art: a song's `img` if it has one, else generated SVG ---------- */
 let uid = 0;
 function art(s) {
+  if (s.img) return `<img src="${s.img}" alt="" draggable="false">`;
   const { kind, a, b, c } = s.art, id = 'g' + (uid++);
   const grad = `<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs>`;
   let g = '';
