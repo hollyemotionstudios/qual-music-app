@@ -112,13 +112,15 @@ svg.f { fill: currentColor; stroke: none; }
 .cover svg, .th svg, .art svg, .cover img, .th img, .art img, .bg img { width: 100%; height: 100%; display: block; object-fit: cover; }
 
 /* player panel */
-.p-player { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 24px 40px; gap: 0; }
-.p-player .cover { width: min(48vh, 82vw, 500px); cursor: pointer; transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+.p-player { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 16px 24px; gap: 0; container-type: size;
+  /* The cover fills the height left after the title, controls and Lyrics button (--below), up to the panel width */
+  --below: 274px; --art: min(100cqw, 100cqh - var(--below) - 12px, 760px); }
+.p-player .cover { width: var(--art); cursor: pointer; transition: transform .5s cubic-bezier(.2,.8,.2,1); }
 .stage:not(.playing) .p-player .cover { transform: scale(.9); }
-.p-player .meta { width: min(48vh, 82vw, 500px); margin-top: 30px; }
+.p-player .meta { width: var(--art); margin-top: 30px; }
 .big-t { font-size: clamp(24px, 3.2vh, 32px); font-weight: 800; letter-spacing: -.02em; line-height: 1.15; }
 .big-a { font-size: clamp(16px, 2.2vh, 20px); color: var(--mute); margin-top: 4px; font-weight: 500; }
-.p-player .ctl { width: min(48vh, 82vw, 500px); }
+.p-player .ctl { width: var(--art); }
 .lyr-btn { margin-top: 18px; display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; background: rgba(255,255,255,.12); font-size: 14px; font-weight: 600; transition: background .2s; }
 .lyr-btn:hover { background: rgba(255,255,255,.2); }
 .lyr-btn svg { width: 17px; height: 17px; }
@@ -179,15 +181,14 @@ svg.f { fill: currentColor; stroke: none; }
 }
 /* Primary target: Galaxy Z Fold 8 cover screen, 416×658 portrait */
 @media (max-height: 720px) {
-  .p-player { padding-bottom: 16px; }
-  .p-player .cover, .p-player .meta, .p-player .ctl { width: min(44vh, 82vw, 500px); }
+  .p-player { padding-bottom: 16px; --below: 232px; }
   .p-player .meta { margin-top: 18px; }
   .p-player .ctl { margin-top: 14px; }
   .p-player .btns { margin-top: 4px; }
   .lyr-btn { margin-top: 10px; }
 }
 @media (max-height: 560px) and (max-width: 900px) {
-  .p-player .cover, .p-player .meta, .p-player .ctl { width: min(40vh, 70vw); }
+  .p-player .cover { width: max(120px, var(--art)); }
 }
 body.idle .stage, body.idle .stage * { cursor: none !important; }
 </style>
