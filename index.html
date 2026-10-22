@@ -144,6 +144,7 @@ svg.f { fill: currentColor; stroke: none; }
 .lyrics { grid-area: lyr; position: relative; min-height: 0; overflow-y: auto; scrollbar-width: none; padding: 32vh 7vw 55vh 2vw; -webkit-mask-image: linear-gradient(transparent 0, #000 16%, #000 78%, transparent 100%); mask-image: linear-gradient(transparent 0, #000 16%, #000 78%, transparent 100%); }
 .lyrics::-webkit-scrollbar { display: none; }
 .line { font-size: clamp(28px, 3.3vw, 48px); font-weight: 800; letter-spacing: -.015em; line-height: 1.18; margin: 0 0 .6em; color: #fff; opacity: .3; filter: blur(min(calc(var(--d, 0) * .7px), 2.4px)); transform: scale(.97); transform-origin: left center; transition: opacity .6s, filter .6s, transform .6s cubic-bezier(.2,.8,.2,1); cursor: pointer; max-width: 15em; }
+.line .en { display: block; font-size: .46em; font-weight: 600; letter-spacing: 0; line-height: 1.3; margin-top: .4em; color: rgba(255,255,255,.72); }
 .line:hover { opacity: .6; filter: none; }
 .line.past { opacity: .2; }
 .line.on { opacity: 1; filter: none; transform: none; }
@@ -229,44 +230,45 @@ body.idle .stage, body.idle .stage * { cursor: none !important; }
 <script>
 /* ---------------------------------------------------------------
    Songs. Funiculì, Funiculà (Denza / Turco, 1880) is public domain.
-   Lyrics are [m:ss, line]; an empty line is an instrumental break.
+   Lyrics are [m:ss, line, English translation]; an empty line is an instrumental break.
+   Translations are the prop's own; the chorus refrain is left untranslated.
    Timings are estimates until the production's recording is known.
 ---------------------------------------------------------------- */
 const SONGS = [
   { id: 'funiculi-funicula', title: 'Funiculì, Funiculà', artist: 'Luigi Denza', album: 'Canzoni Napoletane',
     img: 'cover.jpg', art: { kind: 'funicular', a: '#ffcf70', b: '#e2725b', c: '#1f2a4d' }, duration: 112,
     lyrics: [
-      ['0:12', 'Aissera, oje Nanninè, me ne sagliette,'],
-      ['0:16', 'tu saje addò, tu saje addò'],
-      ['0:19', "Addò 'stu core 'ngrato cchiù dispietto"],
-      ['0:23', 'farme nun pò! Farme nun pò!'],
-      ['0:26', 'Addò lo fuoco coce, ma si fuje'],
-      ['0:30', 'te lassa sta! Te lassa sta!'],
-      ['0:33', "E nun te corre appriesso, nun te struje"],
-      ['0:37', 'sulo a guardà, sulo a guardà.'],
-      ['0:41', "Jammo, jammo, 'ncoppa, jammo jà,"],
-      ['0:44', "jammo, jammo, 'ncoppa, jammo jà,"],
+      ['0:12', 'Aissera, oje Nanninè, me ne sagliette,', 'Last night, oh Nannina, I climbed up,'],
+      ['0:16', 'tu saje addò, tu saje addò', 'you know where, you know where'],
+      ['0:19', "Addò 'stu core 'ngrato cchiù dispietto", 'Where this ungrateful heart can no longer'],
+      ['0:23', 'farme nun pò! Farme nun pò!', "spite me! It can't spite me!"],
+      ['0:26', 'Addò lo fuoco coce, ma si fuje', 'Where the fire burns, but if you run away'],
+      ['0:30', 'te lassa sta! Te lassa sta!', 'it leaves you be! It leaves you be!'],
+      ['0:33', "E nun te corre appriesso, nun te struje", "And it doesn't chase you or wear you out"],
+      ['0:37', 'sulo a guardà, sulo a guardà.', 'just by looking, just by looking.'],
+      ['0:41', "Jammo, jammo, 'ncoppa, jammo jà,", "Let's go, let's go, up to the top, let's go,"],
+      ['0:44', "jammo, jammo, 'ncoppa, jammo jà,", "let's go, let's go, up to the top, let's go,"],
       ['0:47', 'funiculì, funiculà, funiculì, funiculà,'],
-      ['0:51', "'ncoppa, jammo jà, funiculì, funiculà!"],
+      ['0:51', "'ncoppa, jammo jà, funiculì, funiculà!", "up to the top, let's go, funiculì, funiculà!"],
       ['0:55', ''],
-      ['1:02', 'Nèh jammo: da la terra a la montagna'],
-      ['1:06', "no passo nc'è! No passo nc'è!"],
-      ['1:09', 'Se vede Francia, Proceta e la Spagna…'],
-      ['1:13', 'Io veco a tte! Io veco a tte!'],
-      ['1:16', "Tirato co la funa, ditto 'nfatto,"],
-      ['1:20', "'ncielo se va, 'ncielo se va…"],
-      ['1:23', "Se va comm'a lo viento a l'intrasatto,"],
-      ['1:27', 'gué, saglie, sà! Gué, saglie, sà!'],
-      ['1:31', "Jammo, jammo, 'ncoppa, jammo jà,"],
-      ['1:34', "jammo, jammo, 'ncoppa, jammo jà,"],
+      ['1:02', 'Nèh jammo: da la terra a la montagna', "Come on, let's go: from the land to the mountain"],
+      ['1:06', "no passo nc'è! No passo nc'è!", "it's just one step! Just one step!"],
+      ['1:09', 'Se vede Francia, Proceta e la Spagna…', 'You can see France, Procida and Spain…'],
+      ['1:13', 'Io veco a tte! Io veco a tte!', 'And I see you! I see you!'],
+      ['1:16', "Tirato co la funa, ditto 'nfatto,", 'Pulled up by the cable, no sooner said than done,'],
+      ['1:20', "'ncielo se va, 'ncielo se va…", 'up to the sky we go, up to the sky…'],
+      ['1:23', "Se va comm'a lo viento a l'intrasatto,", 'We go like the wind, all of a sudden,'],
+      ['1:27', 'gué, saglie, sà! Gué, saglie, sà!', 'hey, up we go! Hey, up we go!'],
+      ['1:31', "Jammo, jammo, 'ncoppa, jammo jà,", "Let's go, let's go, up to the top, let's go,"],
+      ['1:34', "jammo, jammo, 'ncoppa, jammo jà,", "let's go, let's go, up to the top, let's go,"],
       ['1:37', 'funiculì, funiculà, funiculì, funiculà,'],
-      ['1:41', "'ncoppa, jammo jà, funiculì, funiculà!"],
+      ['1:41', "'ncoppa, jammo jà, funiculì, funiculà!", "up to the top, let's go, funiculì, funiculà!"],
     ] },
 ];
 
 // Build each song's timeline: [{t, text}] with text === '' for breaks, plus an intro break at 0.
 const secs = ts => { const [m, s] = ts.split(':'); return +m * 60 + +s; };
-for (const s of SONGS) s.lines = [{ t: 0, text: '' }, ...s.lyrics.map(([ts, text]) => ({ t: secs(ts), text }))];
+for (const s of SONGS) s.lines = [{ t: 0, text: '' }, ...s.lyrics.map(([ts, text, en]) => ({ t: secs(ts), text, en }))];
 
 /* ---------- Album art: a song's `img` if it has one, else generated SVG ---------- */
 let uid = 0;
@@ -349,7 +351,7 @@ function load(song, { t = 0, play = true } = {}) {
   $('#mini').classList.add('on');
   $$('.row').forEach(r => r.classList.toggle('playing', r.dataset.song === song.id));
   lyricsEl.innerHTML = song.lines.map((l, i) => l.text
-    ? `<div class="line" data-i="${i}">${l.text}</div>`
+    ? `<div class="line" data-i="${i}">${l.text}${l.en ? `<span class="en">${l.en}</span>` : ''}</div>`
     : `<div class="line gap" data-i="${i}"><i style="--k:0"></i><i style="--k:1"></i><i style="--k:2"></i></div>`).join('');
   setPlaying(play);
   render(true);
