@@ -352,6 +352,25 @@ $$('[data-ctl]').forEach(el => el.innerHTML = `
     <button class="sm" aria-label="Repeat">${IC.repeat}</button>
   </div>`);
 
+// The phone's status bar (and Chrome's toolbar) can only be one solid colour, set by theme-color.
+// Match it to the blurred backdrop: the cover's average colour, darkened like .bg and .shade,
+// so the player reads as one surface running up under the status bar.
+function matchStatusBar(song) {
+  const meta = $('meta[name="theme-color"]');
+  if (!song || !song.img) { meta.content = '#0e0e11'; document.documentElement.style.background = ''; return; }
+  const img = new Image();
+  img.onload = () => {
+    const c = document.createElement('canvas'); c.width = c.height = 16;
+    const g = c.getContext('2d'); g.drawImage(img, 0, 0, 16, 16);
+    const d = g.getImageData(0, 0, 16, 16).data; let r = 0, gr = 0, b = 0;
+    for (let i = 0; i < d.length; i += 4) { r += d[i]; gr += d[i + 1]; b += d[i + 2]; }
+    const n = d.length / 4, k = .62 * .85;
+    meta.content = '#' + [r, gr, b].map(v => Math.round(v / n * k).toString(16).padStart(2, '0')).join('');
+    document.documentElement.style.background = meta.content;
+  };
+  img.src = song.img;
+}
+
 function load(song, { t = 0, play = true } = {}) {
   st.song = song; st.t = t; st.idx = -2;
   $$('[data-art]').forEach(el => el.innerHTML = art(song));
@@ -383,6 +402,7 @@ if (!SHOW_LIBRARY) $('[data-act="close"]').style.visibility = 'hidden';
 function show(view) {
   if (view === 'home' && !SHOW_LIBRARY) view = 'player';
   st.view = view;
+  matchStatusBar(view === 'home' ? null : st.song);
   stage.classList.toggle('open', view !== 'home');
   stage.classList.toggle('mode-lyrics', view === 'lyrics');
   $('#lyrToggle').classList.toggle('on', view === 'lyrics');

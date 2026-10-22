@@ -7,6 +7,7 @@ Target sizes: Galaxy Z Fold 8 inner screen held upright, 616×816 CSS px (main),
 ## Full screen on a phone
 - **Best:** open the site in Chrome or Samsung Internet, then use the menu's **Add to Home screen** (or **Install app**). Opened from the home-screen icon, it runs full screen with no address bar or navigation bar.
 - **In the browser:** the first tap anywhere asks the phone to go full screen and keeps the screen from dimming. On iPhone Safari only the home-screen route works.
+- **Status bar:** the player's background runs up under the status bar. On iPhone (home-screen app) the blurred backdrop shows through it; on Android the status bar and Chrome's toolbar can only be one solid colour, so the page sets it to the backdrop's average colour.
 
 ## On set
 - **Space** play/pause · **← / →** seek 5s · **L** lyrics · **Esc** back · **R** reset to the start (paused at 0:00) · **F** fullscreen
