@@ -153,6 +153,11 @@ svg.f { fill: currentColor; stroke: none; }
 .line.gap.on i { opacity: calc(.3 + .7 * min(1, max(0, var(--p, 0) * 3 - var(--k)))); transform: scale(calc(.8 + .4 * min(1, max(0, var(--p, 0) * 3 - var(--k))))); }
 .line.gap:not(.on) { height: 0; margin: 0; overflow: hidden; opacity: 0; }
 
+/* Fold 8 folded screen (948×1048) and other tall two-column screens: no cover beside the lyrics, just title + controls */
+@media (min-width: 901px) and (orientation: portrait) {
+  .lx-meta .cover { display: none; }
+  .lx-meta .txt { margin-top: 0; }
+}
 @media (max-width: 900px) {
   .p-lyrics { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; grid-template-areas: "meta" "lyr" "ctl"; padding: 0 20px 20px; }
   .lx-meta { align-self: start; width: auto; display: flex; align-items: center; gap: 14px; }
