@@ -96,8 +96,6 @@ svg.f { fill: currentColor; stroke: none; }
 @keyframes drift { from { transform: rotate(0) scale(1.1); } to { transform: rotate(360deg) scale(1.1); } }
 
 .topbar { position: absolute; top: env(safe-area-inset-top, 0px); left: 0; right: 0; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 3; }
-.topbar .from { text-align: center; font-size: 11px; color: var(--mute); letter-spacing: .06em; text-transform: uppercase; }
-.topbar .from b { display: block; color: var(--text); font-size: 13px; letter-spacing: 0; text-transform: none; font-weight: 600; margin-top: 2px; }
 .ib { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; color: var(--text); transition: background .2s, color .2s; }
 .ib:hover { background: rgba(255,255,255,.1); }
 .ib.on { background: rgba(255,255,255,.92); color: #111; }
@@ -218,7 +216,6 @@ body.idle .stage, body.idle .stage * { cursor: none !important; }
   <div class="shade"></div>
   <div class="topbar">
     <button class="ib" data-act="close" aria-label="Close"><svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
-    <div class="from">Playing from<b>Listen Now</b></div>
     <button class="ib" id="lyrToggle" data-act="lyrics" aria-label="Lyrics"><svg class="i" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 8h8M8 12h5"/></svg></button>
   </div>
 
