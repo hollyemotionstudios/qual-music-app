@@ -112,12 +112,11 @@ svg.f { fill: currentColor; stroke: none; }
 /* player panel */
 .p-player { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 16px 24px; gap: 0; container-type: size;
   /* The cover fills the height left after the title, controls and Lyrics button (--below), up to the panel width */
-  --below: 274px; --art: min(100cqw, 100cqh - var(--below) - 12px, 760px); }
+  --below: 247px; --art: min(100cqw, 100cqh - var(--below) - 12px, 760px); }
 .p-player .cover { width: var(--art); cursor: pointer; transition: transform .5s cubic-bezier(.2,.8,.2,1); }
 .stage:not(.playing) .p-player .cover { transform: scale(.9); }
 .p-player .meta { width: var(--art); margin-top: 30px; }
 .big-t { font-size: clamp(24px, 3.2vh, 32px); font-weight: 800; letter-spacing: -.02em; line-height: 1.15; }
-.big-a { font-size: clamp(16px, 2.2vh, 20px); color: var(--mute); margin-top: 4px; font-weight: 500; }
 .p-player .ctl { width: var(--art); }
 .lyr-btn { margin-top: 18px; display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; background: rgba(255,255,255,.12); font-size: 14px; font-weight: 600; transition: background .2s; }
 .lyr-btn:hover { background: rgba(255,255,255,.2); }
@@ -170,7 +169,6 @@ svg.f { fill: currentColor; stroke: none; }
   .lx-meta .cover { width: 60px; flex: none; border-radius: 8px; box-shadow: 0 8px 20px rgba(0,0,0,.4); }
   .lx-meta .txt { margin: 0; min-width: 0; }
   .lx-meta .big-t { font-size: 18px; }
-  .lx-meta .big-a { font-size: 15px; margin-top: 2px; }
   .p-lyrics .ctl { width: 100%; margin-top: 8px; }
   .lyrics { padding: 10vh 4px 35vh; -webkit-mask-image: linear-gradient(transparent 0, #000 9%, #000 82%, transparent 100%); mask-image: linear-gradient(transparent 0, #000 9%, #000 82%, transparent 100%); }
   .line { font-size: clamp(26px, 7vw, 36px); }
@@ -179,8 +177,8 @@ svg.f { fill: currentColor; stroke: none; }
 }
 /* Primary target: Galaxy Z Fold 8 cover screen, 416×658 portrait */
 @media (max-height: 720px) {
-  .p-player { padding-bottom: 16px; --below: 232px; }
-  body.no-lyrics .p-player { --below: 186px; }
+  .p-player { padding-bottom: 16px; --below: 205px; }
+  body.no-lyrics .p-player { --below: 159px; }
   .p-player .meta { margin-top: 18px; }
   .p-player .ctl { margin-top: 14px; }
   .p-player .btns { margin-top: 4px; }
@@ -191,7 +189,7 @@ svg.f { fill: currentColor; stroke: none; }
 }
 /* Lyrics parked: no Lyrics pill, so the cover takes its 54px (46px compact) */
 body.no-lyrics .lyr-btn { display: none; }
-@media (min-height: 721px) { body.no-lyrics .p-player { --below: 220px; } }
+@media (min-height: 721px) { body.no-lyrics .p-player { --below: 193px; } }
 body.no-lyrics .p-player .cover { cursor: default; }
 body.idle .stage, body.idle .stage * { cursor: none !important; }
 </style>
@@ -210,7 +208,7 @@ body.idle .stage, body.idle .stage * { cursor: none !important; }
 
 <div class="mini" id="mini">
   <div class="th" id="miniArt"></div>
-  <div class="meta"><div class="tt" id="miniT"></div><div class="ta" id="miniA"></div></div>
+  <div class="meta"><div class="tt" id="miniT"></div></div>
   <button class="btn" data-act="toggle" aria-label="Play or pause"></button>
   <button class="btn" data-act="next" aria-label="Next"><svg class="i f" viewBox="0 0 24 24"><path d="M4 6.2v11.6a.8.8 0 0 0 1.2.7L13 13v4.8a.8.8 0 0 0 1.2.7l8.6-5.8a.8.8 0 0 0 0-1.4L14.2 5.5a.8.8 0 0 0-1.2.7V11L5.2 5.5a.8.8 0 0 0-1.2.7z"/></svg></button>
   <div class="bar"><i id="miniBar"></i></div>
@@ -226,7 +224,7 @@ body.idle .stage, body.idle .stage * { cursor: none !important; }
 
   <div class="panel p-player">
     <div class="cover" data-act="lyrics" data-art></div>
-    <div class="meta"><div class="big-t" data-title></div><div class="big-a" data-artist></div></div>
+    <div class="meta"><div class="big-t" data-title></div></div>
     <div class="ctl" data-ctl></div>
     <button class="lyr-btn" data-act="lyrics"><svg class="i" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 8h8M8 12h5"/></svg>Lyrics</button>
   </div>
@@ -234,7 +232,7 @@ body.idle .stage, body.idle .stage * { cursor: none !important; }
   <div class="panel p-lyrics">
     <div class="lx-meta">
       <div class="cover" data-act="player" data-art></div>
-      <div class="txt"><div class="big-t" data-title></div><div class="big-a" data-artist></div></div>
+      <div class="txt"><div class="big-t" data-title></div></div>
     </div>
     <div class="lyrics" id="lyrics"></div>
     <div class="ctl" data-ctl></div>
@@ -249,7 +247,7 @@ body.idle .stage, body.idle .stage * { cursor: none !important; }
    Timings are estimates until the production's recording is known.
 ---------------------------------------------------------------- */
 const SONGS = [
-  { id: 'funiculi-funicula', title: 'Funiculì, Funiculà', artist: 'Luigi Denza', album: 'Canzoni Napoletane',
+  { id: 'funiculi-funicula', title: 'Funiculì, Funiculà', album: 'Canzoni Napoletane',
     img: 'cover.jpg', art: { kind: 'funicular', a: '#ffcf70', b: '#e2725b', c: '#1f2a4d' }, duration: 112,
     lyrics: [
       ['0:12', 'Aissera, oje Nanninè, me ne sagliette,', 'Last night, oh Nannina, I climbed up,'],
@@ -340,8 +338,8 @@ const st = { song: null, t: 0, playing: false, view: 'home', idx: -1, userScroll
 const fmt = s => { s = Math.max(0, Math.floor(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
 
 // Library
-$('#cards').innerHTML = SONGS.map(s => `<button class="card" data-song="${s.id}"><div class="art">${art(s)}<span class="go">${IC.play}</span></div><div class="t">${s.title}</div><div class="a">${s.artist}</div></button>`).join('');
-$('#rows').innerHTML = SONGS.map((s, i) => `<button class="row" data-song="${s.id}"><span class="n">${i + 1}</span><span class="th">${art(s)}</span><span><div class="tt">${s.title}</div><div class="ta">${s.artist}</div></span><span class="al">${s.album}</span><span class="d">${fmt(s.duration)}</span></button>`).join('');
+$('#cards').innerHTML = SONGS.map(s => `<button class="card" data-song="${s.id}"><div class="art">${art(s)}<span class="go">${IC.play}</span></div><div class="t">${s.title}</div></button>`).join('');
+$('#rows').innerHTML = SONGS.map((s, i) => `<button class="row" data-song="${s.id}"><span class="n">${i + 1}</span><span class="th">${art(s)}</span><span><div class="tt">${s.title}</div></span><span class="al">${s.album}</span><span class="d">${fmt(s.duration)}</span></button>`).join('');
 
 // Shared transport controls, rendered into both stage panels
 $$('[data-ctl]').forEach(el => el.innerHTML = `
@@ -379,8 +377,7 @@ function load(song, { t = 0, play = true } = {}) {
   $$('[data-art]').forEach(el => el.innerHTML = art(song));
   $('#bg').innerHTML = art(song);
   $$('[data-title]').forEach(el => el.textContent = song.title);
-  $$('[data-artist]').forEach(el => el.textContent = song.artist);
-  $('#miniArt').innerHTML = art(song); $('#miniT').textContent = song.title; $('#miniA').textContent = song.artist;
+  $('#miniArt').innerHTML = art(song); $('#miniT').textContent = song.title;
   $('#mini').classList.add('on');
   $$('.row').forEach(r => r.classList.toggle('playing', r.dataset.song === song.id));
   lyricsEl.innerHTML = song.lines.map((l, i) => l.text
